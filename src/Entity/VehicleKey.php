@@ -28,5 +28,22 @@ class VehicleKey
      */
     private $idVehicle;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getIdVehicle(): ?int
+    {
+        return $this->idVehicle;
+    }
+
+    public function setIdVehicle(?int $idVehicle): self
+    {
+        $this->idVehicle = $idVehicle;
+
+        return $this;
+    }
+
 
 }

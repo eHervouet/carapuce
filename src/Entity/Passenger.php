@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Passenger
  *
- * @ORM\Table(name="passenger", indexes={@ORM\Index(name="fk_passenger_id_person", columns={"id_person"})})
+ * @ORM\Table(name="passenger", indexes={@ORM\Index(name="fk_passenger_id_person", columns={"id_person"})}, indexes={@ORM\Index(name="fk_passenger_id_loan", columns={"id_loan"})})
  * @ORM\Entity
  */
 class Passenger
@@ -29,6 +29,16 @@ class Passenger
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $idPerson;
+
+    public function getIdLoan(): ?int
+    {
+        return $this->idLoan;
+    }
+
+    public function getIdPerson(): ?int
+    {
+        return $this->idPerson;
+    }
 
 
 }
