@@ -1,0 +1,16 @@
+{% block body %}
+    <a href="{{ path('vehicle_add') }}" title="ajouter un véhicule">ajouter un véhicule</a>
+    <section>
+        {% for vehicle in vehicles %}
+            <article>
+                Vehicule : {{ vehicle.id }} <br>
+                marque : {{ vehicle.brand }} <br>
+                modele : {{ vehicle.model }} <br>
+                <a href="{{ path('vehicle_modifier',{'id':vehicle.id}) }}" title ="Modifier le véhicule">Modifier le véhicule</a>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+
+
