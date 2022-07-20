@@ -2,52 +2,29 @@
 
 namespace App\Entity;
 
+use App\Repository\VehicleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Vehicle
- *
- * @ORM\Table(name="vehicle", indexes={@ORM\Index(name="fk_vehicle_id_site", columns={"id_site"})})
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: VehicleRepository::class)]
 class Vehicle
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="brand", type="string", length=32, nullable=false)
-     */
-    private $brand;
+    #[ORM\Column(length: 32)]
+    private ?string $brand = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="model", type="string", length=32, nullable=false)
-     */
-    private $model;
+    #[ORM\Column(length: 32)]
+    private ?string $model = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nb_places", type="integer", nullable=false)
-     */
-    private $nbPlaces;
+    #[ORM\Column]
+    private ?int $nbPlaces = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_site", type="integer", nullable=false)
-     */
-    private $idSite;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $idSite = null;
 
     public function getId(): ?int
     {
@@ -90,17 +67,15 @@ class Vehicle
         return $this;
     }
 
-    public function getIdSite(): ?int
+    public function getIdSite(): ?Site
     {
         return $this->idSite;
     }
 
-    public function setIdSite(int $idSite): self
+    public function setIdSite(?Site $idSite): self
     {
         $this->idSite = $idSite;
 
         return $this;
     }
-
-
 }

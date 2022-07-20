@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
+
+{% form_theme vehicleForm 'bootstrap_4_layout.html.twig' %}
+
 {% block title %}
     Creer un nouveau véhicule | {{ parent() }}
 {% endblock %}
 
 {% block body %}
+    {{ parent() }}
+    <bv>
     <div>
         {{ form_start(vehicleForm) }}
         {{ form_widget(vehicleForm) }}

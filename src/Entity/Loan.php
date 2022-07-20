@@ -2,72 +2,40 @@
 
 namespace App\Entity;
 
+use App\Repository\LoanRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Loan
- *
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: LoanRepository::class)]
 class Loan
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="depart_date", type="datetime", nullable=false)
-     */
-    private $departDate;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $departDate = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="return_date", type="datetime", nullable=false)
-     */
-    private $returnDate;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $returnDate = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="return_vehicle", type="boolean", nullable=true)
-     */
-    private $returnVehicle;
+    #[ORM\Column]
+    private ?bool $returnVehicle = null;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="return_key", type="boolean", nullable=true)
-     */
-    private $returnKey;
+    #[ORM\Column]
+    private ?bool $returnKey = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="destination_address", type="string", length=128, nullable=false)
-     */
-    private $destinationAddress;
+    #[ORM\Column(length: 128)]
+    private ?string $destinationAddress = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="driver", type="integer", nullable=false)
-     */
-    private $driver;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Person $driver = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="affected_vehicle", type="integer", nullable=false)
-     */
-    private $affectedVehicle;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $affectedVehicle = null;
 
     public function getId(): ?int
     {
@@ -103,7 +71,7 @@ class Loan
         return $this->returnVehicle;
     }
 
-    public function setReturnVehicle(?bool $returnVehicle): self
+    public function setReturnVehicle(bool $returnVehicle): self
     {
         $this->returnVehicle = $returnVehicle;
 
@@ -115,7 +83,7 @@ class Loan
         return $this->returnKey;
     }
 
-    public function setReturnKey(?bool $returnKey): self
+    public function setReturnKey(bool $returnKey): self
     {
         $this->returnKey = $returnKey;
 
@@ -134,29 +102,27 @@ class Loan
         return $this;
     }
 
-    public function getDriver(): ?int
+    public function getDriver(): ?Person
     {
         return $this->driver;
     }
 
-    public function setDriver(int $driver): self
+    public function setDriver(?Person $driver): self
     {
         $this->driver = $driver;
 
         return $this;
     }
 
-    public function getAffectedVehicle(): ?int
+    public function getAffectedVehicle(): ?Vehicle
     {
         return $this->affectedVehicle;
     }
 
-    public function setAffectedVehicle(int $affectedVehicle): self
+    public function setAffectedVehicle(?Vehicle $affectedVehicle): self
     {
         $this->affectedVehicle = $affectedVehicle;
 
         return $this;
     }
-
-
 }

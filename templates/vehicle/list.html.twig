@@ -1,4 +1,8 @@
+{% extends 'base.html.twig' %}
+
 {% block body %}
+    {{ parent() }}
+    <br>
     <a href="{{ path('vehicle_add') }}" title="ajouter un véhicule">ajouter un véhicule</a>
     <section>
         {% for vehicle in vehicles %}

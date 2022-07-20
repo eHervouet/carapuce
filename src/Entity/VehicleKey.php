@@ -2,48 +2,35 @@
 
 namespace App\Entity;
 
+use App\Repository\VehicleKeyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * VehicleKey
- *
- * @ORM\Table(name="vehicle_key", indexes={@ORM\Index(name="fk_key_id_vehicle", columns={"id_vehicle"})})
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: VehicleKeyRepository::class)]
 class VehicleKey
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column()]
+    private ?int $id = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_vehicle", type="integer", nullable=true)
-     */
-    private $idVehicle;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $idVehicle = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdVehicle(): ?int
+    public function getIdVehicle(): ?Vehicle
     {
         return $this->idVehicle;
     }
 
-    public function setIdVehicle(?int $idVehicle): self
+    public function setIdVehicle(?Vehicle $idVehicle): self
     {
         $this->idVehicle = $idVehicle;
 
         return $this;
     }
-
-
 }

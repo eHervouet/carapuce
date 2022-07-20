@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Vehicle;
+use App\Entity\VehicleKey;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Vehicle>
+ * @extends ServiceEntityRepository<VehicleKey>
  *
- * @method Vehicle|null find($id, $lockMode = null, $lockVersion = null)
- * @method Vehicle|null findOneBy(array $criteria, array $orderBy = null)
- * @method Vehicle[]    findAll()
- * @method Vehicle[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method VehicleKey|null find($id, $lockMode = null, $lockVersion = null)
+ * @method VehicleKey|null findOneBy(array $criteria, array $orderBy = null)
+ * @method VehicleKey[]    findAll()
+ * @method VehicleKey[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VehicleRepository extends ServiceEntityRepository
+class VehicleKeyRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Vehicle::class);
+        parent::__construct($registry, VehicleKey::class);
     }
 
-    public function add(Vehicle $entity, bool $flush = false): void
+    public function add(VehicleKey $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class VehicleRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Vehicle $entity, bool $flush = false): void
+    public function remove(VehicleKey $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class VehicleRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Vehicle[] Returns an array of Vehicle objects
+//     * @return VehicleKey[] Returns an array of VehicleKey objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class VehicleRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Vehicle
+//    public function findOneBySomeField($value): ?VehicleKey
 //    {
 //        return $this->createQueryBuilder('v')
 //            ->andWhere('v.exampleField = :val')
