@@ -37,11 +37,19 @@ class Loan
     #[ORM\JoinColumn(nullable: false)]
     private ?Vehicle $affectedVehicle = null;
 
+    #[ORM\Column(length: 128)]
+    private ?string $statut = "created";
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    public function getStatut(): ?String
+    {
+        return $this->statut;
+    }
+    
     public function getDepartDate(): ?\DateTimeInterface
     {
         return $this->departDate;
@@ -110,6 +118,13 @@ class Loan
     public function setDriver(?Person $driver): self
     {
         $this->driver = $driver;
+
+        return $this;
+    }
+
+    public function setStatut(String $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }
