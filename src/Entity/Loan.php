@@ -40,6 +40,15 @@ class Loan
     #[ORM\Column(length: 128)]
     private ?string $statut = "created";
 
+    #[ORM\Column(length: 255)]
+    private ?string $destination_city = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $destination_cp = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $comment = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +146,42 @@ class Loan
     public function setAffectedVehicle(?Vehicle $affectedVehicle): self
     {
         $this->affectedVehicle = $affectedVehicle;
+
+        return $this;
+    }
+
+    public function getDestinationCity(): ?string
+    {
+        return $this->destination_city;
+    }
+
+    public function setDestinationCity(string $destination_city): self
+    {
+        $this->destination_city = $destination_city;
+
+        return $this;
+    }
+
+    public function getDestinationCp(): ?string
+    {
+        return $this->destination_cp;
+    }
+
+    public function setDestinationCp(string $destination_cp): self
+    {
+        $this->destination_cp = $destination_cp;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }

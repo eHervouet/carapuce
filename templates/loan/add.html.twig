@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme loanForm 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}{{ parent() }} | Demande d'emprunt{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <bv>
+    <div>
+    <h2>Demande d'emprunt</h2><br>
+    {{ form_start(loanForm) }}
+        {{ form_row(loanForm.affectedVehicle, {label:'Véhicule :'}) }}
+        {{ form_row(loanForm.destinationAddress, {label:'Adresse de destination :'}) }}
+        {{ form_row(loanForm.destination_city, {label:'Ville de destination :'}) }}
+        {{ form_row(loanForm.destination_cp, {label:'Code postal de destination :'}) }}
+        {{ form_row(loanForm.departDate, {label:'Date de départ :'}) }}
+        {{ form_row(loanForm.returnDate, {label:'Date d\'arrivée :'}) }}
+        {{ form_row(loanForm.comment, {label:'Commentaire (facultatif) :'}) }}<br/>
+        <input class="btn btn-primary" type="submit" value="Valider la demande">
+    {{ form_end(loanForm) }}
+    </div>
+{% endblock %}
