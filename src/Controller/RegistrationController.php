@@ -23,7 +23,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $person = $form->getData();
-
+            
             $plaintextPassword = $person->getPassword();
 
             // hash the password (based on the security.yaml config for the $user class)
@@ -33,7 +33,7 @@ class RegistrationController extends AbstractController
             );
             $person->setPassword($hashedPassword);
 
-            $person->setRoles(['ROLE_USER']);
+            $person->setRoles([$form->get('role')->getData()]);
 
             $entityManager->persist($person);
             $entityManager->flush();
