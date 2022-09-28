@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 #[Route('/loan', name: 'loan_')]
 class LoanController extends AbstractController
 {
+
     #[Route('/list', name: 'list')]
     public function index(LoanRepository $loanRepository): Response
     {
@@ -68,6 +69,39 @@ class LoanController extends AbstractController
         ]);
     }
 
+    #[Route('/valider/{id}', name: 'valider')]
+    public function valider(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $loan = $loanRepository->find($id);
+        $loan->setStatut("Validé");
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+
+    #[Route('/refuser/{id}', name: 'refuser')]
+    public function refuser(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnVehicle(true);
+        $loan->setReturnKey(true);
+        $loan->setReturnDate(new \DateTime());
+        $loan->setStatut("Refusé");
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+
     #[Route('/annuler/{id}', name: 'annuler')]
     public function annuler(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
@@ -89,5 +123,33 @@ class LoanController extends AbstractController
         }
 
         return $this->redirectToRoute('loan_list');
+    }
+
+    #[Route('/rendrev/{id}', name: 'rendreV')]
+    public function rendreV(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnVehicle(true);
+        $loan->setReturnDate(new \DateTime());
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+    #[Route('/rendrec/{id}', name: 'rendreC')]
+    public function rendreC(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnKey(true);
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
     }
 }
