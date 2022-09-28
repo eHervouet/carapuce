@@ -1,4 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Détails d'un véhicule{% endblock %}
+
 {% block body %}
+    {{ parent() }}
+    <br>
     <h2>{{ vehicle.brand }}</h2>
     Marque du véhicule : {{ vehicle.brand }} <br>
     Modèle du véhicule : {{ vehicle.model}} <br>

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220517200423 extends AbstractMigration
+final class Version20220928065613 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20220517200423 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX fk_passenger_id_person ON passenger');
-        $this->addSql('CREATE INDEX fk_passenger_id_loan ON passenger (id_loan)');
+        $this->addSql('ALTER TABLE site ADD name VARCHAR(50) NOT NULL, ADD cp VARCHAR(5) NOT NULL, ADD city VARCHAR(50) NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX fk_passenger_id_loan ON passenger');
-        $this->addSql('CREATE INDEX fk_passenger_id_person ON passenger (id_person)');
+        $this->addSql('ALTER TABLE site DROP name, DROP cp, DROP city');
     }
 }

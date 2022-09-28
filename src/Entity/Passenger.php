@@ -2,43 +2,43 @@
 
 namespace App\Entity;
 
+use App\Repository\PassengerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Passenger
- *
- * @ORM\Table(name="passenger", indexes={@ORM\Index(name="fk_passenger_id_person", columns={"id_person"})}, indexes={@ORM\Index(name="fk_passenger_id_loan", columns={"id_loan"})})
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: PassengerRepository::class)]
 class Passenger
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_loan", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $idLoan;
+    #[ORM\Id]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Loan $idLoan = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_person", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $idPerson;
+    #[ORM\Id]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Person $idPerson = null;
 
-    public function getIdLoan(): ?int
+    public function getIdLoan(): ?Loan
     {
         return $this->idLoan;
     }
 
-    public function getIdPerson(): ?int
+    public function setIdLoan(?Loan $idLoan): self
+    {
+        $this->idLoan = $idLoan;
+
+        return $this;
+    }
+
+    public function getIdPerson(): ?Person
     {
         return $this->idPerson;
     }
 
+    public function setIdPerson(?Person $idPerson): self
+    {
+        $this->idPerson = $idPerson;
 
+        return $this;
+    }
 }

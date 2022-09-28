@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Vehicle;
+use App\Entity\Site;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class VehicleType extends AbstractType
+class SiteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('brand')
-            ->add('model')
-            ->add('nbPlaces')
-            ->add('idSite')
+            ->add('address')
+            ->add('name')
+            ->add('cp')
+            ->add('city')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Vehicle::class,
+            'data_class' => Site::class,
         ]);
     }
 }

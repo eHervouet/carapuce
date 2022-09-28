@@ -2,48 +2,47 @@
 
 namespace App\Controller;
 
-use App\Entity\Person;
-use App\Form\RegistrationFormType;
-use App\Security\LoginAuthenticator;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Person;
+use App\Form\Type\PersonType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    #[Route('/registration', name: 'registration')]
+    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $user = new Person();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+
+        $person = new Person();
+        $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
 
-            $entityManager->persist($user);
+            $person = $form->getData();
+
+            $plaintextPassword = $person->getPassword();
+
+            // hash the password (based on the security.yaml config for the $user class)
+            $hashedPassword = $passwordHasher->hashPassword(
+                $person,
+                $plaintextPassword
+            );
+            $person->setPassword($hashedPassword);
+
+            $person->setRoles(['ROLE_USER']);
+
+            $entityManager->persist($person);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $this->render('login/index.html.twig', ['error' => null, 'last_username' => $person->getEmail()]);
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+        return $this->renderForm('registration/index.html.twig', [
+            'form' => $form,
         ]);
     }
 }
