@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Détails d'un site{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <br>
+    <h2>{{ site.name }}</h2>
+    Adresse : {{ site.address }} <br>
+    Ville : {{ site.city }}<br>
+    Code postal : {{ site.cp }}
+{% endblock %}
+

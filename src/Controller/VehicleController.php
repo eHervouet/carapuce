@@ -17,6 +17,8 @@ class VehicleController extends AbstractController
     #[Route('/', name: 'list')]
     public function list(VehicleRepository $vehicleRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $listVehicles = $vehicleRepository->findBy([],['brand' =>'ASC']);
         
         return $this->render('Vehicle/list.html.twig', [
@@ -27,6 +29,8 @@ class VehicleController extends AbstractController
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $vehicle = new Vehicle();
         $vehicleForm = $this->createForm(VehicleType::class,$vehicle);
         $vehicleForm->handleRequest($request);
@@ -49,6 +53,8 @@ class VehicleController extends AbstractController
     #[Route('/details/{id}', name: 'details')]
     public function details(int $id, VehicleRepository $vehicleRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $vehicle = $vehicleRepository->find($id);
         return $this->render('vehicle/details.html.twig', [
             "vehicle"=>$vehicle,
@@ -58,6 +64,8 @@ class VehicleController extends AbstractController
     #[Route('/modifier/{id}', name: 'modifier')]
     public function modifier(int $id, EntityManagerInterface $entityManager, Request $request, VehicleRepository $vehicleRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = $this->getUser();
         $vehicle = $vehicleRepository->find($id);
 
@@ -72,9 +80,7 @@ class VehicleController extends AbstractController
             $pathInfo = $request->getPathInfo();
             $requestUri = $request->getRequestUri();
 
-            $url = str_replace($pathInfo, rtrim($pathInfo, ' /add'), $requestUri);
-
-            return $this->redirect($url, 301);
+            return $this->redirectToRoute('vehicle_details',['id'=>$vehicle->getId()]);
         }
         else
         {

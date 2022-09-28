@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme siteForm 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}{{ parent() }} | Modifier un sitee{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <br>
+    <div>
+        {{ form_start(siteForm) }}
+            {{ form_row(siteForm.name, {label:'Nom :'}) }}
+            {{ form_row(siteForm.address, {label:'Adresse :'}) }}
+            {{ form_row(siteForm.city, {label:'Ville :'}) }}
+            {{ form_row(siteForm.cp, {label:'Code postal :'}) }}<br/>
+            <input class="btn btn-primary" type="submit" value="Sauvegarder les modifications">
+        {{ form_end(siteForm) }}
+    </div>
+{% endblock %}

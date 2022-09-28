@@ -33,8 +33,12 @@ class RegistrationController extends AbstractController
             );
             $person->setPassword($hashedPassword);
 
+            $person->setRoles(['ROLE_USER']);
+
             $entityManager->persist($person);
             $entityManager->flush();
+
+            return $this->render('login/index.html.twig', ['error' => null, 'last_username' => $person->getEmail()]);
         }
 
         return $this->renderForm('registration/index.html.twig', [
