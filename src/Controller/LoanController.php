@@ -68,6 +68,37 @@ class LoanController extends AbstractController
         ]);
     }
 
+    #[Route('/valider/{id}', name: 'valider')]
+    public function valider(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+
+        $loan = $loanRepository->find($id);
+        $loan->setStatut("Validé");
+
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('loan_list');
+    }
+
+    #[Route('/refuser/{id}', name: 'refuser')]
+    public function refuser(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+        
+        $loan = $loanRepository->find($id);
+        $loan->setReturnVehicle(true);
+        $loan->setReturnKey(true);
+        $loan->setReturnDate(new \DateTime());
+        $loan->setStatut("Refusé");
+
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('loan_list');
+    }
+
     #[Route('/annuler/{id}', name: 'annuler')]
     public function annuler(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
@@ -91,32 +122,61 @@ class LoanController extends AbstractController
         return $this->redirectToRoute('loan_list');
     }
 
+    #[Route('/complete/{id}', name: 'complete')]
+    public function complete(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+        $loan = $loanRepository->find($id);
+
+        if($loan->getDriver()->getId() == $user->getId())
+        {
+            $loan->setStatut("Complété");
+            $loan->setReturnDate(new \DateTime());
+            $entityManager->persist($loan);
+            $entityManager->flush();
+            $pathInfo = $request->getPathInfo();
+            $requestUri = $request->getRequestUri();
+        }
+
+        return $this->redirectToRoute('loan_list');
+    }
+
     #[Route('/rendrev/{id}', name: 'rendreV')]
     public function rendreV(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+
         $loan = $loanRepository->find($id);
         $loan->setReturnVehicle(true);
         $loan->setReturnDate(new \DateTime());
+
+        if($loan->isReturnVehicle() && $loan->isReturnKey()) {
+            $loan->setStatut('Soldé');
+        }
+
         $entityManager->persist($loan);
         $entityManager->flush();
-        $listLoans = $loanRepository->findAll();
-        return $this->render('loan/list.html.twig', [
-            "loans" =>$listLoans
-        ]);
+
+        return $this->redirectToRoute('loan_list');
     }
     
     #[Route('/rendrec/{id}', name: 'rendreC')]
     public function rendreC(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+
         $loan = $loanRepository->find($id);
         $loan->setReturnKey(true);
+
+        if($loan->isReturnVehicle() && $loan->isReturnKey()) {
+            $loan->setStatut('Soldé');
+        }
+
         $entityManager->persist($loan);
         $entityManager->flush();
-        $listLoans = $loanRepository->findAll();
-        return $this->render('loan/list.html.twig', [
-            "loans" =>$listLoans
-        ]);
+
+        return $this->redirectToRoute('loan_list');
     }
 }
