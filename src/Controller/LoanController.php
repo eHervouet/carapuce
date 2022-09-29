@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 #[Route('/loan', name: 'loan_')]
 class LoanController extends AbstractController
 {
+
     #[Route('/list', name: 'list')]
     public function index(LoanRepository $loanRepository): Response
     {
@@ -86,7 +87,7 @@ class LoanController extends AbstractController
     public function refuser(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
-        
+
         $loan = $loanRepository->find($id);
         $loan->setReturnVehicle(true);
         $loan->setReturnKey(true);
