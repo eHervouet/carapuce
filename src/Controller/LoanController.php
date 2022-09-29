@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 #[Route('/loan', name: 'loan_')]
 class LoanController extends AbstractController
 {
+
     #[Route('/list', name: 'list')]
     public function index(LoanRepository $loanRepository): Response
     {
@@ -65,6 +66,39 @@ class LoanController extends AbstractController
         $loan = $loanRepository->find($id);
         return $this->render('loan/details.html.twig', [
             "loan"=>$loan,
+        ]);
+    }
+
+    #[Route('/valider/{id}', name: 'valider')]
+    public function valider(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $loan = $loanRepository->find($id);
+        $loan->setStatut("Validé");
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+
+    #[Route('/refuser/{id}', name: 'refuser')]
+    public function refuser(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnVehicle(true);
+        $loan->setReturnKey(true);
+        $loan->setReturnDate(new \DateTime());
+        $loan->setStatut("Refusé");
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
         ]);
     }
 

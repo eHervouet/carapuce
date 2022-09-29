@@ -30,7 +30,7 @@ class LoanType extends AbstractType
                 'choice_label' => function($vehicle) {
                     return $vehicle->getBrand()." - ".$vehicle->getModel().' - '.$vehicle->getNbPlaces().' places';
                 }])
-            ->add('comment', TextareaType::class)
+            ->add('comment', TextareaType::class, array('required' => false))
         ;
     }
 
