@@ -128,7 +128,7 @@ class LoanController extends AbstractController
     #[Route('/rendrev/{id}', name: 'rendreV')]
     public function rendreV(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
         $loan = $loanRepository->find($id);
         $loan->setReturnVehicle(true);
         $loan->setReturnDate(new \DateTime());
@@ -139,10 +139,11 @@ class LoanController extends AbstractController
             "loans" =>$listLoans
         ]);
     }
+    
     #[Route('/rendrec/{id}', name: 'rendreC')]
     public function rendreC(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
         $loan = $loanRepository->find($id);
         $loan->setReturnKey(true);
         $entityManager->persist($loan);

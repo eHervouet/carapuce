@@ -37,15 +37,17 @@
             <td>{{ loan.statut }}</td>
             <td>
             {% if loan.statut == "En validation" %}
-              {% if is_granted('ROLE_ADMIN') %}
+              {% if is_granted('ROLE_GESTIONNAIRE') %}
                 <a class="btn btn-success" href="{{ path('loan_valider',{'id':loan.id}) }}" >Valider</a><a class="btn btn-danger" href="{{ path('loan_refuser',{'id':loan.id}) }}">Refuser</a>
               {% endif %}
             {% elseif loan.statut == 'Validé' %}
-              {% if not loan.returnVehicle %}
-                <a class="btn btn-primary" href="{{ path('loan_rendreV',{'id':loan.id}) }}" >Voiture rendu</a>
-              {% endif %}
-              {% if not loan.returnKey %}
-                <a class="btn btn-primary" href="{{ path('loan_rendreC',{'id':loan.id}) }}" >Clé rendu</a>
+              {% if is_granted('ROLE_GESTIONNAIRE') %}
+                {% if not loan.returnVehicle %}
+                  <a class="btn btn-primary" href="{{ path('loan_rendreV',{'id':loan.id}) }}" >Voiture rendu</a>
+                {% endif %}
+                {% if not loan.returnKey %}
+                  <a class="btn btn-primary" href="{{ path('loan_rendreC',{'id':loan.id}) }}" >Clé rendu</a>
+                {% endif %}
               {% endif %}
             <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a>
             {% endif %}</td>
