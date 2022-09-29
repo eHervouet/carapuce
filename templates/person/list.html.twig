@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Liste des véhicules{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <br>
+    <a class="btn btn-primary" href="{{ path('registration') }}" >Ajouter un utilisateur</a><br/><br/>
+    <table id="table" 
+        class="table table-hover" 
+        data-toggle="table" 
+        data-filter-control="true"
+        data-click-to-select="true">
+        <thead>
+            <tr>
+            <th data-field="email" data-filter-control="select">Email</th>
+            <th data-field="firstName" data-filter-control="select">Prénom</th>
+            <th data-field="lastName" data-filter-control="select">Nom de famille
+            <th data-field="phoneNumber" data-filter-control="select">Téléphone</th>
+            <th data-field="age" data-filter-control="select">Age</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for person in persons %}
+            <tr>
+            <td>{{ person.email }}</td>
+            <td>{{ person.firstName }}</td>
+            <td>{{ person.lastName }}</td>
+            <td>{{ person.phoneNumber }}</td>
+            <td>{{ person.age }}</td>
+            <td><a href="{{ path('user_modify',{'id':person.id}) }}" title ="Modifier"><i class="bi bi-pencil-square"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block javascripts %}{{ parent() }} 
+<link href="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script>
+var $table = $('#table');
+$(function () {
+  $('#toolbar').find('select').change(function () {
+    $table.bootstrapTable('refreshOptions', {
+      exportDataType: $(this).val()
+    });
+  });
+})
+</script>
+{% endblock %}
+
+

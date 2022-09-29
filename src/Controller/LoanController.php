@@ -90,4 +90,33 @@ class LoanController extends AbstractController
 
         return $this->redirectToRoute('loan_list');
     }
+
+    #[Route('/rendrev/{id}', name: 'rendreV')]
+    public function rendreV(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnVehicle(true);
+        $loan->setReturnDate(new \DateTime());
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+    
+    #[Route('/rendrec/{id}', name: 'rendreC')]
+    public function rendreC(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+        $loan = $loanRepository->find($id);
+        $loan->setReturnKey(true);
+        $entityManager->persist($loan);
+        $entityManager->flush();
+        $listLoans = $loanRepository->findAll();
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
 }

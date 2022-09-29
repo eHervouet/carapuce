@@ -41,16 +41,21 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{path('loan_list')}}">Liste des trajets</a>
                                 </li>
-                                {% if is_granted('ROLE_ADMIN') %}
+                                {% if is_granted('ROLE_GESTIONNAIRE') %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="">Validation des emprunts</a>
+                                        <a class="nav-link" href="{{path('loan_list')}}">Validation des emprunts</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{path('vehicle_list')}}">Gestion des véhicules</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{path('site_list')}}">Gestion des sites</a>
-                                    </li>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{path('site_list')}}">Gestion des sites</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{path('user_list')}}">Gestion des utilisateurs</a>
+                                        </li>
+                                    {% endif %}
                                 {% endif %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Mon profil</a>
