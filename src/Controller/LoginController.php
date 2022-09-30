@@ -11,11 +11,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\PersonRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Person;
 
 class LoginController extends AbstractController
 {
     #[Route('/', name: 'app_login')]
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(AuthenticationUtils $authenticationUtils, PersonRepository $pr): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('index');
@@ -90,4 +91,17 @@ class LoginController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/user/details', name: 'user_details')]
+    public function details(PersonRepository $personRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $personRepository->find($this->getUser()->getId());
+        
+        return $this->render('person/details.html.twig', [
+            "user"=>$user,
+        ]);
+    }
+    
 }

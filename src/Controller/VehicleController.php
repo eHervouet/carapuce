@@ -19,7 +19,7 @@ class VehicleController extends AbstractController
     #[Route('/', name: 'list')]
     public function list(VehicleRepository $vehicleRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
 
         $listVehicles = $vehicleRepository->findBy([],['brand' =>'ASC']);
         
@@ -31,7 +31,7 @@ class VehicleController extends AbstractController
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
 
         $vehicle = new Vehicle();
         $vehicleForm = $this->createForm(VehicleType::class,$vehicle);
@@ -65,7 +65,7 @@ class VehicleController extends AbstractController
     #[Route('/supprimer/{id}', name: 'supprimer')]
     public function supprimer(int $id, EntityManagerInterface $entityManager, Request $request, VehicleRepository $vehicleRepository, LoanRepository $loanRepository,VehicleKeyRepository $vehicleKeyRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
         $vehicle = $vehicleRepository->find($id);
         $listloan = $loanRepository->findBy(['affectedVehicle' => $vehicle->getId()]);
         foreach($listloan as $loan)
@@ -90,7 +90,7 @@ class VehicleController extends AbstractController
     #[Route('/modifier/{id}', name: 'modifier')]
     public function modifier(int $id, EntityManagerInterface $entityManager, Request $request, VehicleRepository $vehicleRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
 
         $user = $this->getUser();
         $vehicle = $vehicleRepository->find($id);

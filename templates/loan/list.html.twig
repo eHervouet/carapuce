@@ -9,16 +9,15 @@
     <table id="table" 
         class="table table-hover" 
         data-toggle="table" 
-        data-filter-control="true"
-        data-click-to-select="true">
+        data-filter-control="true">
         <thead>
             <tr>
             <th data-field="driver_id" data-filter-control="select">Conducteur</th>
-            <th data-field="despart_address" data-filter-control="select">Addresse de depart</th>
-            <th data-field="destination_address" data-filter-control="select">Addresse de destination</th>
-            <th data-field="depart_date" data-filter-control="select">Date de départ</th>
-            <th data-field="return_date" data-filter-control="select">Date d'arrivée</th>
-            <th date-field="affected_vehicle_id" data-filter-control="select">Voiture</th>
+            <th data-field="depart_address" data-filter-control="select">Addresse de depart</th>
+            <th data-field="destinationAddress" data-filter-control="select">Addresse de destination</th>
+            <th data-field="departDate" data-filter-control="select">Date de départ</th>
+            <th data-field="returnDate" data-filter-control="select">Date d'arrivée</th>
+            <th date-field="affectedVehicle" data-filter-control="select">Voiture</th>
             {% if is_granted('ROLE_GESTIONNAIRE') %}
             <th date-field="affected_return_vehicle" data-filter-control="select">Voiture rendue</th>
             <th date-field="affected_return_key" data-filter-control="select">Clé rendue</th>
@@ -45,10 +44,14 @@
             {% if loan.statut == "En validation" %}
               {% if is_granted('ROLE_GESTIONNAIRE') %}
                 <a class="btn btn-success" href="{{ path('loan_valider',{'id':loan.id}) }}">Valider</a><a class="btn btn-danger" href="{{ path('loan_refuser',{'id':loan.id}) }}">Refuser</a>
+                {% if loan.driver.id == app.user.id %}
+                <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a>
+                {% endif %}
+              {% else %}
               {% endif %}
             {% elseif loan.statut == 'Validé' %}
               {% if loan.driver.id == app.user.id %}
-                <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a><a class="btn btn-success" href="{{ path('loan_complete',{'id':loan.id}) }}">Completer</a>
+                <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a><a class="btn btn-success" href="{{ path('loan_complete',{'id':loan.id}) }}">Terminer l'emprunt</a>
               {% else %}
                 <a class="btn btn-primary" href="">Rejoindre ce trajet</a>
               {% endif %}
@@ -76,12 +79,8 @@
 <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 <script>
 var $table = $('#table');
-$(function () {
-  $('#toolbar').find('select').change(function () {
-    $table.bootstrapTable('refreshOptions', {
-      exportDataType: $(this).val()
-    });
-  });
-})
+$(function() {
+    $('#table').bootstrapTable()
+  })
 </script>
 {% endblock %}
