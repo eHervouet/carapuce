@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Person;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class PersonType extends AbstractType
 {
@@ -52,6 +53,12 @@ class PersonType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Person::class,
+            "constraints" => [
+                new UniqueEntity([
+                    'entityClass' => Person::class,
+                    'fields' => 'email',
+                    'message' => 'Cette adresse email est déjà utilisée.'
+                ])]
         ]);
     }
 }
