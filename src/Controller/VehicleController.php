@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Vehicle;
 use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\LoanRepository;
+use App\Repository\VehicleKeyRepository;
 use App\Form\Type\VehicleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +62,31 @@ class VehicleController extends AbstractController
             "vehicle"=>$vehicle,
         ]);
     }
-
+    #[Route('/supprimer/{id}', name: 'supprimer')]
+    public function supprimer(int $id, EntityManagerInterface $entityManager, Request $request, VehicleRepository $vehicleRepository, LoanRepository $loanRepository,VehicleKeyRepository $vehicleKeyRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $vehicle = $vehicleRepository->find($id);
+        $listloan = $loanRepository->findBy(['affectedVehicle' => $vehicle->getId()]);
+        foreach($listloan as $loan)
+        {
+            $entityManager->remove($loan);
+            $entityManager->flush();
+        }
+        $listkeys = $vehicleKeyRepository->findBy(['idVehicle'=> $vehicle->getId()]);
+        foreach($listkeys as $keys)
+        {
+            $entityManager->remove($keys);
+            $entityManager->flush();
+        }
+        $entityManager->remove($vehicle);
+        $entityManager->flush();
+        $listVehicles = $vehicleRepository->findBy([],['brand' =>'ASC']);
+        
+        return $this->render('Vehicle/list.html.twig', [
+            "vehicles" =>$listVehicles
+        ]);
+    }
     #[Route('/modifier/{id}', name: 'modifier')]
     public function modifier(int $id, EntityManagerInterface $entityManager, Request $request, VehicleRepository $vehicleRepository): Response
     {

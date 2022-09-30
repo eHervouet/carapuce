@@ -14,6 +14,7 @@
         <thead>
             <tr>
             <th data-field="driver_id" data-filter-control="select">Conducteur</th>
+            <th data-field="despart_address" data-filter-control="select">Addresse de depart</th>
             <th data-field="destination_address" data-filter-control="select">Addresse de destination</th>
             <th data-field="depart_date" data-filter-control="select">Date de départ</th>
             <th data-field="return_date" data-filter-control="select">Date d'arrivée</th>
@@ -30,6 +31,7 @@
         {% for loan in loans %}
             <tr>
             <td>{{ loan.driver.firstName }} {{ loan.driver.lastName }}</td>
+            <td>{{ loan.affectedVehicle.idSite.address }} - {{ loan.affectedVehicle.idSite.city }} - {{ loan.affectedVehicle.idSite.cp }}</td>
             <td>{{ loan.destinationAddress }} - {{ loan.destinationCity }} - {{ loan.destinationCp }}</td>
             <td>{{ loan.departDate|date("d/m/Y") }}</td>
             <td>{{ loan.returnDate|date("d/m/Y") }}</td>

@@ -29,6 +29,18 @@ class LoanController extends AbstractController
         ]);
     }
 
+    #[Route('/maListe', name: 'maListe')]
+    public function maListe(LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
+        $listLoans = $loanRepository->findBy(['driver' => $user->getId()]);
+        
+        return $this->render('loan/list.html.twig', [
+            "loans" =>$listLoans
+        ]);
+    }
+    
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager, PersonRepository $personRepository): Response
     {

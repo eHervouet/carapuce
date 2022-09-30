@@ -25,7 +25,7 @@
             <td>{{ vehicle.brand }}</td>
             <td>{{ vehicle.model }}</td>
             <td>{{ vehicle.nbPlaces }}</td>
-            <td><a href="{{ path('vehicle_modifier',{'id':vehicle.id}) }}" title ="Modifier"><i class="bi bi-pencil-square"></i></a><a href="{{ path('vehicle_details',{'id':vehicle.id}) }}"><i class="bi bi-eye"></i></a></td>
+            <td><a href="{{ path('vehicle_modifier',{'id':vehicle.id}) }}" title ="Modifier"><i class="bi bi-pencil-square"></i></a><a href="{{ path('vehicle_details',{'id':vehicle.id}) }}"><i class="bi bi-eye"></i></a><a class="btn btn-danger" href="{{ path('vehicle_supprimer',{'id':vehicle.id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
         </tbody>
