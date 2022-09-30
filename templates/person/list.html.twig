@@ -13,10 +13,11 @@
         data-click-to-select="true">
         <thead>
             <tr>
-            <th data-field="email" data-filter-control="select">Email</th>
             <th data-field="firstName" data-filter-control="select">Prénom</th>
-            <th data-field="lastName" data-filter-control="select">Nom de famille
+            <th data-field="lastName" data-filter-control="select">Nom de famille</th>
+            <th data-field="email" data-filter-control="select">Email</th>
             <th data-field="phoneNumber" data-filter-control="select">Téléphone</th>
+            <th data-field="address" data-filter-control="select">Adresse</th>
             <th data-field="age" data-filter-control="select">Age</th>
             <th>Actions</th>
             </tr>
@@ -24,10 +25,11 @@
         <tbody>
         {% for person in persons %}
             <tr>
-            <td>{{ person.email }}</td>
             <td>{{ person.firstName }}</td>
             <td>{{ person.lastName }}</td>
+            <td>{{ person.email }}</td>
             <td>{{ person.phoneNumber }}</td>
+            <td>{{ person.address }}</td>
             <td>{{ person.age }}</td>
             <td><a href="{{ path('user_modify',{'id':person.id}) }}" title ="Modifier"><i class="bi bi-pencil-square"></i></a></td>
             </tr>
