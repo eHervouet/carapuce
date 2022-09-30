@@ -20,6 +20,7 @@ class RegistrationController extends AbstractController
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $person = $form->getData();
@@ -39,10 +40,12 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             return $this->render('login/index.html.twig', ['error' => null, 'last_username' => $person->getEmail()]);
+
         }
 
         return $this->renderForm('registration/index.html.twig', [
             'form' => $form,
         ]);
+
     }
 }
