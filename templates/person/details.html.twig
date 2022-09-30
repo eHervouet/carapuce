@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | {{ user.firstName}} {{ user.lastName }}{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <br>
+    <h2 style="text-decoration: underline;">Mon profil</h2>
+    Prénom : {{ user.firstName}} <br>
+    Nom de famille : {{ user.lastName }} <br>
+    Adresse email : {{ user.email }} <br>
+    Numéro de téléphone : {{ user.phoneNumber }} <br>
+    Adresse : {{ user.address }} <br>
+    Age : {{ user.age }} <br>
+{% endblock %}
+
