@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} | Liste des véhicules{% endblock %}
+{% block title %}{{ parent() }} | Liste des sites{% endblock %}
 
 {% block body %}
     {{ parent() }}
     <br>
-    <a class="btn btn-primary" href="{{ path('vehicle_add') }}" >Ajouter un véhicule</a><br/><br/>
+    <a class="btn btn-primary" href="{{ path('site_add') }}">ajouter un site</a><br/><br/>
     <table id="table" 
         class="table table-hover" 
         data-toggle="table" 
@@ -13,19 +13,21 @@
         data-click-to-select="true">
         <thead>
             <tr>
-            <th data-field="brand" data-filter-control="select">Marque</th>
-            <th data-field="model" data-filter-control="select">Modèle</th>
-            <th data-field="nbPlaces" data-filter-control="select">Nombre de place</th>
+            <th data-field="name" data-filter-control="select">Nom</th>
+            <th data-field="address" data-filter-control="select">Adresse</th>
+            <th data-field="city" data-filter-control="select">Ville</th>
+            <th date-field="cp" data-filter-control="select">Code postal</th>
             <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for vehicle in vehicles %}
+        {% for site in sites %}
             <tr>
-            <td>{{ vehicle.brand }}</td>
-            <td>{{ vehicle.model }}</td>
-            <td>{{ vehicle.nbPlaces }}</td>
-            <td><a href="{{ path('vehicle_modifier',{'id':vehicle.id}) }}" title ="Modifier"><i class="bi bi-pencil-square"></i></a><a href="{{ path('vehicle_details',{'id':vehicle.id}) }}"><i class="bi bi-eye"></i></a><a class="btn btn-danger" href="{{ path('vehicle_supprimer',{'id':vehicle.id}) }}">Supprimer</a></td>
+            <td>{{ site.name }}</td>
+            <td>{{ site.address }}</td>
+            <td>{{ site.city }}</td>
+            <td>{{ site.cp }}</td>
+            <td><a href="{{ path('site_modify',{'id':site.id}) }}"><i class="bi bi-pencil-square"></i></a><a href="{{ path('site_details',{'id':site.id}) }}"><i class="bi bi-eye"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>
@@ -48,5 +50,3 @@ $(function () {
 })
 </script>
 {% endblock %}
-
-

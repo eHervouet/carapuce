@@ -8,37 +8,47 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Person;
 use App\Form\Type\PersonType;
+use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/registration', name: 'registration')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function registration(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository): Response
     {
 
-        $person = new Person();
-        $form = $this->createForm(PersonType::class, $person);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if(($this->getUser() && in_array('ROLE_ADMIN', $this->getUser()->getRoles())) || count($personRepository->findAll()) == 0) {
+            $person = new Person();
+            $form = $this->createForm(PersonType::class, $person);
+            $form->handleRequest($request);
 
-            $person = $form->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            $plaintextPassword = $person->getPassword();
+                $person = $form->getData();
+                
+                $plaintextPassword = $person->getPassword();
 
-            // hash the password (based on the security.yaml config for the $user class)
-            $hashedPassword = $passwordHasher->hashPassword(
-                $person,
-                $plaintextPassword
-            );
-            $person->setPassword($hashedPassword);
+                // hash the password (based on the security.yaml config for the $user class)
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $person,
+                    $plaintextPassword
+                );
+                $person->setPassword($hashedPassword);
 
-            $entityManager->persist($person);
-            $entityManager->flush();
+                $person->setRoles([$form->get('role')->getData()]);
+
+                $entityManager->persist($person);
+                $entityManager->flush();
+
+                return $this->render('login/index.html.twig', ['error' => null, 'last_username' => $person->getEmail()]);
+            }
+
+            return $this->renderForm('registration/index.html.twig', [
+                'form' => $form,
+            ]);
         }
 
-        return $this->renderForm('registration/index.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('index');
     }
 }

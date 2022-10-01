@@ -2,9 +2,7 @@
 
 {% form_theme vehicleForm 'bootstrap_4_layout.html.twig' %}
 
-{% block title %}
-    Creer un nouveau véhicule | {{ parent() }}
-{% endblock %}
+{% block title %}{{ parent() }} | Modifier un véhicule{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -12,7 +10,7 @@
     <div>
         {{ form_start(vehicleForm) }}
         {{ form_widget(vehicleForm) }}
-        <button>Sauvegarder les modifications</button>
+        <input class="btn btn-primary" type="submit" value="Sauvegarder les modifications">
         {{ form_end(vehicleForm) }}
     </div>
 {% endblock %}

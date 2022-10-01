@@ -2,17 +2,19 @@
 
 {% form_theme vehicleForm 'bootstrap_4_layout.html.twig' %}
 
-{% block title %}
-    Creer un nouveau véhicule | {{ parent() }}
-{% endblock %}
+{% block title %}{{ parent() }} | Créer un nouveau véhicule{% endblock %}
 
 {% block body %}
     {{ parent() }}
     <bv>
     <div>
-        {{ form_start(vehicleForm) }}
-        {{ form_widget(vehicleForm) }}
+    <h2>Ajouter un véhicule</h2><br>
+    {{ form_start(vehicleForm) }}
+        {{ form_row(vehicleForm.brand, {label:'Marques :'}) }}
+        {{ form_row(vehicleForm.model, {label:'Modèle :'}) }}
+        {{ form_row(vehicleForm.nbPlaces, {label:'Nombre de place :'}) }}
+        {{ form_row(vehicleForm.idSite, {label:'Site :'}) }}
         <button>ajouter le véhicule</button>
-        {{ form_end(vehicleForm) }}
+    {{ form_end(vehicleForm) }}
     </div>
 {% endblock %}

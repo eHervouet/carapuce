@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Person;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class PersonType extends AbstractType
 {
@@ -38,13 +40,25 @@ class PersonType extends AbstractType
             ->add('address')
             ->add('age')
             ->add('phoneNumber', TelType::class)
-        ;
+            ->add('role', ChoiceType::class, [
+                'choices'  => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Gestionnaire de parc' => 'ROLE_GESTIONNAIRE'
+                ], 
+                'mapped' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Person::class,
+            "constraints" => [
+                new UniqueEntity([
+                    'entityClass' => Person::class,
+                    'fields' => 'email',
+                    'message' => 'Cette adresse email est déjà utilisée.'
+                ])]
         ]);
     }
 }
