@@ -52,7 +52,16 @@
               {% if loan.driver.id == app.user.id %}
                 <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a><a class="btn btn-success" href="{{ path('loan_complete',{'id':loan.id}) }}">Terminer l'emprunt</a>
               {% else %}
-                <a class="btn btn-primary" href="">Rejoindre ce trajet</a>
+                {% if loan.departDate > date() %}
+                  {% if loan.userInPassengers(app.user) %}
+                    <a class="btn btn-primary" href="{{ path('loan_quitter',{'id':loan.id}) }}">Quitter ce trajet</a>
+                  {% else %}
+                    <a class="btn btn-primary" href="{{ path('loan_rejoindre',{'id':loan.id}) }}">Rejoindre ce trajet</a>
+                    
+                  {% endif %}
+                  
+                {% endif %}
+                
               {% endif %}
             {% elseif loan.statut == 'Complété' %}
               {% if is_granted('ROLE_GESTIONNAIRE') %}

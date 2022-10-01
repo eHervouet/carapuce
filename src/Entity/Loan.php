@@ -48,6 +48,9 @@ class Loan
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
+    
+    #[ORM\ManyToMany(targetEntity: Person::class)]
+    private $passengers;
 
     public function getId(): ?int
     {
@@ -185,4 +188,38 @@ class Loan
 
         return $this;
     }
+
+    public function getPassengers()
+    {
+        return $this->passengers;
+    }
+
+    public function setPassengers($passengers)
+    {
+        $this->passengers = $passengers;
+
+        return $this;
+    }
+
+    public function userInPassengers($user)
+    {
+        foreach ($this->passengers as $passenger) {
+            if($passenger->getId() == $user->getId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function deletePassanger($user)
+    {
+        foreach ($this->passengers as $key => $passenger) {
+            if($passenger->getId() == $user->getId()){
+                unset($this->passengers[$key]);
+                break;
+            }
+        }
+
+    }
+
 }

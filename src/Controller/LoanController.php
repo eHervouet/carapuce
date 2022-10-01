@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Type\LoanType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Loan;
+use App\Entity\Passenger;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/loan', name: 'loan_')]
@@ -61,7 +62,7 @@ class LoanController extends AbstractController
             $entityManager->persist($loan);
             $entityManager->flush();
 
-            $this->addFlash('success','Loan added.');
+            $this->addFlash('success','Demande d\'emprunt créée');
             return $this->redirectToRoute('loan_list');
         }
 
@@ -135,6 +136,69 @@ class LoanController extends AbstractController
         return $this->redirectToRoute('loan_list');
     }
 
+    #[Route('/rejoindre/{id}', name: 'rejoindre')]
+    public function rejoindre(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+        $loan = $loanRepository->find($id);
+        
+        if($loan->getStatut() != "Validé" && $loan->getDepartDate() > new \DateTime("now") ){
+            $this->addFlash(
+                'danger',
+                'La demande d\'emprunt n\'est pas validé'
+            );
+            return $this->redirectToRoute('loan_list');
+        }
+        if($loan->getDepartDate() < new \DateTime("now") ){
+            $this->addFlash(
+                'danger',
+                'Trajet en cours, Impossible de rejoindre !'
+            );
+            return $this->redirectToRoute('loan_list');
+        }
+        $loan->getPassengers()->add($user);
+        $entityManager->persist($loan);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('loan_list');
+    }
+    #[Route('/quitter/{id}', name: 'quitter')]
+    public function quitter(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+        $loan = $loanRepository->find($id);
+        
+        if($loan->getStatut() != "Validé" && $loan->getDepartDate() > new \DateTime("now") ){
+            $this->addFlash(
+                'danger',
+                'La demande d\'emprunt n\'est pas validé'
+            );
+            return $this->redirectToRoute('loan_list');
+        }
+        if($loan->getDepartDate() < new \DateTime("now") ){
+            $this->addFlash(
+                'danger',
+                'Trajet en cours, Impossible de rejoindre !'
+            );
+            return $this->redirectToRoute('loan_list');
+        }
+        if(!$loan->userInPassengers($user)){
+            $this->addFlash(
+                'danger',
+                'Utilisateur n\'est pas dans le trajet !'
+            );
+            return $this->redirectToRoute('loan_list');
+        }
+        $loan->deletePassanger($user);
+        $entityManager->persist($loan);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('loan_list');
+    }
     #[Route('/complete/{id}', name: 'complete')]
     public function complete(int $id, EntityManagerInterface $entityManager, Request $request, LoanRepository $loanRepository): Response
     {
