@@ -44,6 +44,9 @@
                                 </li>
                                 {% if is_granted('ROLE_GESTIONNAIRE') %}
                                     <li class="nav-item">
+                                        <a class="nav-link" href="{{path('loan_gestion')}}">Gestion des emprunts</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" href="{{path('vehicle_list')}}">Gestion des véhicules</a>
                                     </li>
                                     {% if is_granted('ROLE_ADMIN') %}
@@ -78,7 +81,13 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            <div class="container-md">
+            {% block header %}
+                {% if title is defined %}
+                    <h1 style=" text-align: center;margin-top:20px">{{title}}</h1>
+                {% endif %}
+            {% endblock %}
+            
+            <div class="container-md" style="max-width:none">
         {% endblock %}
     </body>
 </html>
