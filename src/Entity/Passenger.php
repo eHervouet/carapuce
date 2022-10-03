@@ -11,33 +11,33 @@ class Passenger
     #[ORM\Id]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Loan $idLoan = null;
+    private ?Loan $loan = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Person $idPerson = null;
+    private ?Person $person = null;
 
-    public function getIdLoan(): ?Loan
+    public function getLoan(): ?Loan
     {
-        return $this->idLoan;
+        return $this->loan;
     }
 
-    public function setIdLoan(?Loan $idLoan): self
+    public function setLoan(?Loan $loan): self
     {
-        $this->idLoan = $idLoan;
+        $this->loan = $loan;
 
         return $this;
     }
 
-    public function getIdPerson(): ?Person
+    public function getPerson(): ?Person
     {
-        return $this->idPerson;
+        return $this->person;
     }
 
-    public function setIdPerson(?Person $idPerson): self
+    public function setPerson(?Person $person): self
     {
-        $this->idPerson = $idPerson;
+        $this->person = $person;
 
         return $this;
     }

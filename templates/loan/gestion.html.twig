@@ -6,8 +6,7 @@
     {{ parent() }}
     <br>
     </div>
-    <a style="margin-left: 5%;" class="btn btn-primary" href="{{ path('loan_add') }}" title="ajouter un site">Faire une demande d'emprunt</a><br><br>
-    <table style="width: 90%; margin: auto;"  
+    <table style="width: 90%; margin: auto;" 
         id="table" 
         class="table table-hover" 
         data-toggle="table" 
@@ -17,9 +16,14 @@
             <th data-field="driver_id" data-filter-control="select">Conducteur</th>
             <th data-field="depart_address" data-filter-control="input">Addresse de depart</th>
             <th data-field="destinationAddress" data-filter-control="input">Addresse de destination</th>
-            <th data-field="departDate" data-filter-control="select">Date de départ</th>
-            <th data-field="returnDate" data-filter-control="select">Date d'arrivée</th>
+            <th data-field="departDate" data-filter-control="input">Date de départ</th>
+            <th data-field="returnDate" data-filter-control="input">Date d'arrivée</th>
             <th data-field="affectedVehicle" data-filter-control="select">Voiture</th>
+            {% if is_granted('ROLE_GESTIONNAIRE') %}
+            <th>Voiture rendue</th>
+            <th>Clé rendue</th>
+            {% endif %}
+            <th data-field="statut" data-filter-control="select">Statut</th>
             <th>Commentaires</th>
             <th>Passagers</th>
             <th>Actions</th>
@@ -34,20 +38,30 @@
             <td>{{ loan.departDate|date("Y-m-d H:i:s") }}</td>
             <td>{{ loan.returnDate|date("Y-m-d H:i:s" ) }}</td>
             <td>{{ loan.affectedVehicle.brand }} - {{ loan.affectedVehicle.model }}</td>
+            <td>{% if loan.returnVehicle %}<i class="bi bi-check-lg"></i>{% else %}<i class="bi bi-x-lg"></i>{% endif %}</td>
+            <td>{% if loan.returnKey %}<i class="bi bi-check-lg"></i>{% else %}<i class="bi bi-x-lg"></i>{% endif %}</td>
+            <td>{{ loan.statut }}</td>
             <td>{{loan.comment}}</td>
             <td>
               {% for passenger in loan.passengers %}  
-              
                 <span class="badge bg-secondary">{{passenger.firstName ~ ' ' ~ passenger.lastName}}</span></h6>
               {% endfor %}
             </td>
             <td>
-              {% if loan.departDate > date() and app.user.id != loan.driver.id and loan.statut == "Validé" %}
-                {% if loan.userInPassengers(app.user) %}
-                <a class="btn btn-warning" href="{{ path('loan_quitter',{'id':loan.id}) }}">Quitter ce trajet</a>
-                {% else %}
-                <a class="btn btn-primary" href="{{ path('loan_rejoindre',{'id':loan.id}) }}">Rejoindre ce trajet</a>
-                {% endif %}           
+              {% if loan.statut == "En validation" %}
+                <a class="btn btn-success" href="{{ path('loan_valider',{'id':loan.id}) }}">Valider</a>
+              {% endif %}
+              {% if (loan.statut == "En validation") or (loan.statut == "Validé" and loan.departDate > date()) %}
+                <a class="btn btn-danger" href="{{ path('loan_refuser',{'id':loan.id}) }}">Refuser</a>
+              {% endif %}
+
+              {% if loan.statut == 'Complété' or (loan.returnDate < date() and loan.statut == 'Validé') %}
+                {% if not loan.returnVehicle %}
+                    <a class="btn btn-primary" href="{{ path('loan_rendreV',{'id':loan.id}) }}">Voiture rendu</a>
+                {% endif %}
+                {% if not loan.returnKey %}
+                    <a class="btn btn-primary" href="{{ path('loan_rendreC',{'id':loan.id}) }}">Clé rendu</a>
+                {% endif %}
               {% endif %}
             </td>
             

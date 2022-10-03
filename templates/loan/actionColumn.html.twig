@@ -1,0 +1,31 @@
+
+{% if loan.statut == "En validation" %}
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+    <a class="btn btn-success" href="{{ path('loan_valider',{'id':loan.id}) }}">Valider</a><a class="btn btn-danger" href="{{ path('loan_refuser',{'id':loan.id}) }}">Refuser</a>
+    {% endif %}
+    {% if loan.driver.id == app.user.id %}
+    <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a>
+    {% endif %}
+{% elseif loan.statut == 'Validé' %}
+    {% if loan.driver.id == app.user.id %}
+    <a class="btn btn-danger" href="{{ path('loan_annuler',{'id':loan.id}) }}">Annuler</a>
+    <a class="btn btn-success" href="{{ path('loan_complete',{'id':loan.id}) }}">Terminer l'emprunt</a>
+    {% else %}
+    {% if loan.departDate > date() %}
+        {% if loan.userInPassengers(app.user) %}
+        <a class="btn btn-primary" href="{{ path('loan_quitter',{'id':loan.id}) }}">Quitter ce trajet</a>
+        {% else %}
+        <a class="btn btn-primary" href="{{ path('loan_rejoindre',{'id':loan.id}) }}">Rejoindre ce trajet</a>
+        {% endif %}           
+    {% endif %}
+    {% endif %}
+{% elseif loan.statut == 'Complété' %}
+    {% if is_granted('ROLE_GESTIONNAIRE') %}
+    {% if not loan.returnVehicle %}
+        <a class="btn btn-primary" href="{{ path('loan_rendreV',{'id':loan.id}) }}">Voiture rendu</a>
+    {% endif %}
+    {% if not loan.returnKey %}
+        <a class="btn btn-primary" href="{{ path('loan_rendreC',{'id':loan.id}) }}">Clé rendu</a>
+    {% endif %}
+    {% endif %}
+{% endif %}

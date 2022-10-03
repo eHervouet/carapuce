@@ -7,7 +7,7 @@
 {% block body %}
     {{ parent() }}
     <bv>
-    <div>
+    <div class="container-md">
     <h2>Demande d'emprunt</h2><br>
     {{ form_start(loanForm) }}
         {{ form_row(loanForm.affectedVehicle, {label:'Véhicule :'}) }}

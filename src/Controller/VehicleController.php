@@ -44,7 +44,7 @@ class VehicleController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success','Vehicle added.');
-            return $this->redirectToRoute('vehicle_details',['id'=>$vehicle->getId()]);
+            return $this->redirectToRoute('vehicle_list');
         }
 
         return $this->render('vehicle/add.html.twig', [
@@ -106,7 +106,7 @@ class VehicleController extends AbstractController
             $pathInfo = $request->getPathInfo();
             $requestUri = $request->getRequestUri();
 
-            return $this->redirectToRoute('vehicle_details',['id'=>$vehicle->getId()]);
+            return $this->redirectToRoute('vehicle_list');
         }
         else
         {

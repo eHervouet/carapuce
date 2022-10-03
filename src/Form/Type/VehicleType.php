@@ -22,7 +22,7 @@ class VehicleType extends AbstractType
                 'class' => Site::class,
             
                 // uses the User.username property as the visible option string
-                'choice_label' => 'address'])
+                'choice_label' => 'name'])
         ;
     }
 

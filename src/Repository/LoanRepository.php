@@ -39,6 +39,19 @@ class LoanRepository extends ServiceEntityRepository
         }
     }
 
+    public function listerTrajets(): array
+    {
+        $query = $this->createQueryBuilder('l')
+            ->andWhere('l.statut = :statut')
+            ->setParameter('statut', "Validé")
+            ->andWhere('l.departDate > :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('l.departDate', 'ASC')
+            ->getQuery()
+        ;
+        return $query->getResult();
+    }
+
 //    /**
 //     * @return Loan[] Returns an array of Loan objects
 //     */
