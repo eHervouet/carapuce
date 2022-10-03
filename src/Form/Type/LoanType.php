@@ -6,9 +6,10 @@ use App\Entity\Loan;
 use App\Entity\Vehicle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class LoanType extends AbstractType
@@ -16,10 +17,10 @@ class LoanType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('departDate', DateType::class, [
+            ->add('departDate', DateTimeType::class, [
                 'widget' => 'single_text'
             ])
-            ->add('returnDate', DateType::class, [
+            ->add('returnDate', DateTimeType::class, [
                 'widget' => 'single_text'
             ])
             ->add('destinationAddress')

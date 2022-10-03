@@ -49,7 +49,7 @@ class Loan
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
     
-    #[ORM\ManyToMany(targetEntity: Person::class)]
+    #[ORM\ManyToMany(targetEntity: Person::class, fetch:"EAGER")]
     private $passengers;
 
     public function getId(): ?int
